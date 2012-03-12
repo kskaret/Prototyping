@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/integration
+              http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+              http://www.springframework.org/schema/integration/stream
+              http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+
+	<int:gateway id="sendRefujonskrav"
+		service-interface="no.kantega.kriska.refusjonskrav.RefusjonskravEngine" />
+
+	<int:channel id="skjemasett" />
+
+	<int:splitter input-channel="skjemasett" ref="skjemasettSplitter"
+		method="split" output-channel="skjema" />
+
+	<int:channel id="skjema">
+
+	</int:channel>
+
+	<!-- <int:bridge input-channel="skjema" output-channel="rendezvousChannel" 
+		/> <int:channel id="rendezvousChannel"> <int:rendezvous-queue /> </int:channel> -->
+	<int:chain input-channel="skjema" output-channel="ferdigValiderteSkjema">
+		<int:filter ref="skjemaFilter" method="skjemaKlarTilSending" />
+		<int:service-activator ref="webService" method="sendSkjema" />
+		<int:filter ref="skjemaFilter" method="skjemaKlarTilValidering" />
+		<int:service-activator ref="webService" method="validerSkjema" />
+	</int:chain>
+
+	<int:channel id="ferdigValiderteSkjema" />
+
+
+	<int:aggregator input-channel="ferdigValiderteSkjema"
+		ref="skjemasettSplitter" method="ferdigstill"
+		output-channel="ferdigeSkjemasett" />
+
+	<int-stream:stdout-channel-adapter
+		id="ferdigeSkjemasett" />
+
+	<int:poller default="true" id="poller" fixed-rate="100" />
+
+	<beans:bean id="skjemasettSplitter"
+		class="no.kantega.kriska.refusjonskrav.SkjemasettSplitter" />
+
+	<beans:bean id="skjemaFilter"
+		class="no.kantega.kriska.refusjonskrav.SkjemaFilter" />
+
+	<beans:bean id="webService" class="no.kantega.kriska.refusjonskrav.WebService" />
+
+
+
+
+</beans:beans>

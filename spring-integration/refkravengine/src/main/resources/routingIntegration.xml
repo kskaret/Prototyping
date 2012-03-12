@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+              http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/integration
+              http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+              http://www.springframework.org/schema/integration/stream
+              http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+
+
+	<int:gateway id="sendRefujonskrav"
+		service-interface="no.kantega.kriska.refusjonskrav.RefusjonskravEngine" />
+
+	<int:channel id="skjemasett" />
+
+	<int:router input-channel="skjemasett" ref="skjemasettRouter"
+		method="styrSkjemasett" />
+
+	<int:channel id="tilValidering" />
+
+	<int:service-activator input-channel="tilValidering"
+		ref="webService" method="validerSkjema" output-channel="skjemasett" />
+
+	<int:channel id="tilSending" />
+
+	<int:service-activator input-channel="tilSending"
+		ref="webService" method="sendSkjema" output-channel="skjemasett" />
+
+	<int-stream:stdout-channel-adapter
+		id="ferdigeSkjemasett" />
+
+	<int:poller default="true" id="poller" fixed-rate="100" />
+
+	<beans:bean id="skjemasettRouter"
+		class="no.kantega.kriska.refusjonskrav.SkjemasettRouter" />
+
+
+	<beans:bean id="webService" class="no.kantega.kriska.refusjonskrav.WebService" />
+
+
+
+
+</beans:beans>
