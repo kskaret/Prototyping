@@ -17,17 +17,27 @@ public class IntegrationTest {
 				.leggTilSkjema(6);//
 	}
 
+	private Refusjonskrav byggRefusjonskravInput() {
+		return new Refusjonskrav("A", 3)//
+				.leggTilSkjema(1)//
+				.leggTilSkjema(2)//
+				.leggTilSkjema(3)//
+				.leggTilSkjema(4)//
+				.leggTilSkjema(5)//
+				.leggTilSkjema(6);
+	}
+
 	@Test
 	public void filterIntegration() throws InterruptedException {
 		AbstractApplicationContext context = new ClassPathXmlApplicationContext(
 				"refkravIntegration.xml");
 
-		RefusjonskravEngine refusjonskravEngine = context.getBean(
-				"sendRefujonskrav", RefusjonskravEngine.class);
+		SkjemasettEngine skjemasettEngine = context.getBean("sendRefusjonskrav",
+				SkjemasettEngine.class);
 
 		Skjemasett skjemasett = byggSkjemasettInput();
 
-		refusjonskravEngine.sendRefusjonskrav(skjemasett);
+		skjemasettEngine.sendSkjemasett(skjemasett);
 
 		validerSluttilstand(skjemasett);
 	}
@@ -47,12 +57,17 @@ public class IntegrationTest {
 				"routingIntegration.xml");
 
 		RefusjonskravEngine refusjonskravEngine = context.getBean(
-				"sendRefujonskrav", RefusjonskravEngine.class);
+				"sendRefusjonskrav", RefusjonskravEngine.class);
 
-		Skjemasett skjemasett = byggSkjemasettInput();
+		Refusjonskrav refusjonskrav = byggRefusjonskravInput();
 
-		refusjonskravEngine.sendRefusjonskrav(skjemasett);
+		refusjonskravEngine.sendRefusjonskrav(refusjonskrav);
 
-		validerSluttilstand(skjemasett);
+		for (Skjema skjema : refusjonskrav) {
+			Assert.assertTrue("Skjema " + skjema.getSkjemanNr() + " er sendt",
+					skjema.isSendt());
+			Assert.assertTrue("Skjema " + skjema.getSkjemanNr()
+					+ " er validert", skjema.isValidert());
+		}
 	}
 }

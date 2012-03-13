@@ -4,6 +4,7 @@ import org.springframework.integration.annotation.Gateway;
 
 public interface RefusjonskravEngine {
 
-	@Gateway(requestChannel = "skjemasett")
-	void sendRefusjonskrav(Skjemasett skjemasett);
+
+	@Gateway(requestChannel = "refusjonskrav")
+	void sendRefusjonskrav(Refusjonskrav refusjonskrav);
 }

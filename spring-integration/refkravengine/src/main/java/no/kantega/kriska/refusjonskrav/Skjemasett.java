@@ -1,30 +1,12 @@
 package no.kantega.kriska.refusjonskrav;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Skjemasett {
-
-	public enum SkjemasettFlyt {
-		TIL_SENDING("tilSending"), TIL_VALIDERING("tilValidering"), FERDIG(
-				"ferdigeSkjemasett");
-
-		private String value;
-
-		SkjemasettFlyt(String value) {
-			this.value = value;
-		}
-
-		public String value() {
-			return value;
-		}
-
-	}
 
 	private SortedSet<Skjema> ubehandledeSkjema;
 
@@ -94,24 +76,6 @@ public class Skjemasett {
 
 	public Integer getFoersteIkkeValiderteSkjema() {
 		return sendteSkjema.first().getSkjemanNr();
-	}
-
-	public SkjemasettFlyt getNesteFlyt() {
-		if (!sendteSkjema.isEmpty()) {
-			return SkjemasettFlyt.TIL_VALIDERING;
-		} else if (!ubehandledeSkjema.isEmpty()) {
-			return SkjemasettFlyt.TIL_SENDING;
-		} else {
-			return SkjemasettFlyt.FERDIG;
-		}
-	}
-
-	public Skjema getSkjemaTilSending() {
-		return ubehandledeSkjema.first();
-	}
-
-	public Skjema getSkjemaTilValidering() {
-		return sendteSkjema.first();
 	}
 
 	public void sendSkjema(Skjema skjema) {

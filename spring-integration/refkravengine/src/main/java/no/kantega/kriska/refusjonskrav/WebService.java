@@ -22,27 +22,27 @@ public class WebService {
 		return skjema;
 	}
 
-	public Skjemasett sendSkjema(Skjemasett skjemasett)
+	public Refusjonskrav sendSkjema(Refusjonskrav refusjonskrav)
 			throws InterruptedException {
-		Skjema skjema = skjemasett.getSkjemaTilSending();
+		Skjema skjema = refusjonskrav.getSkjemaTilBehandling();
 		System.out.println("Sender " + skjema);
 		if (!skjema.isSendt()) {
 			Thread.sleep(100);
 			// if (skjema.getSkjemanNr() != 3) {
-			skjemasett.sendSkjema(skjema);
+			refusjonskrav.sendSkjema(skjema);
 			// }
 		}
-		return skjemasett;
+		return refusjonskrav;
 	}
 
-	public Skjemasett validerSkjema(Skjemasett skjemasett)
+	public Refusjonskrav validerSkjema(Refusjonskrav refusjonskrav)
 			throws InterruptedException {
-		Skjema skjema = skjemasett.getSkjemaTilValidering();
+		Skjema skjema = refusjonskrav.getSkjemaTilBehandling();
 		System.out.println("Validerer " + skjema);
 		if (!skjema.isValidert()) {
 			Thread.sleep(50);
-			skjemasett.validerSkjema(skjema);
+			refusjonskrav.validerSkjema(skjema);
 		}
-		return skjemasett;
+		return refusjonskrav;
 	}
 }

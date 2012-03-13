@@ -2,7 +2,7 @@ package no.kantega.kriska.refusjonskrav;
 
 public class SkjemasettRouter {
 
-	public String styrSkjemasett(Skjemasett skjemasett) {
-		return skjemasett.getNesteFlyt().value();
+	public String styrSkjemasett(Refusjonskrav refusjonskrav) {
+		return refusjonskrav.getNesteFlyt().value();
 	}
 }

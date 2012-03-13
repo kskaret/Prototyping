@@ -10,8 +10,8 @@
               http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
 
 
-	<int:gateway id="sendRefujonskrav"
-		service-interface="no.kantega.kriska.refusjonskrav.RefusjonskravEngine" />
+	<int:gateway id="sendRefusjonskrav"
+		service-interface="no.kantega.kriska.refusjonskrav.SkjemasettEngine" />
 
 	<int:channel id="skjemasett" />
 

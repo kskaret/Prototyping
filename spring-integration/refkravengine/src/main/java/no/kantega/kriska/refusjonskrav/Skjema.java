@@ -1,12 +1,37 @@
 package no.kantega.kriska.refusjonskrav;
 
-public class Skjema {
+import org.apache.commons.lang.builder.CompareToBuilder;
+
+public class Skjema implements Comparable<Skjema> {
 
 	private Integer skjemaNr;
 
 	private boolean sendt;
 	private boolean validert;
 	private Skjemasett skjemasett;
+
+	public enum SkjemaFlyt {
+		TIL_VALIDERING(1, "tilValidering"), TIL_SENDING(2, "tilSending"), FERDIG(
+				3, "ferdigeRefusjonskrav");
+
+		private int prioritet;
+
+		private String value;
+
+		private SkjemaFlyt(int prioritet, String value) {
+			this.prioritet = prioritet;
+			this.value = value;
+		}
+
+		public Integer getPrioritet() {
+			return prioritet;
+		}
+
+		public String value() {
+			return value;
+		}
+
+	}
 
 	public Skjema(int skjemanNr, Skjemasett skjemasett) {
 		this.skjemaNr = skjemanNr;
@@ -52,4 +77,22 @@ public class Skjema {
 		return skjemasett;
 	}
 
+	public SkjemaFlyt getSkjemaFlyt() {
+		if (sendt && validert) {
+			return SkjemaFlyt.FERDIG;
+		} else if (sendt && !validert) {
+			return SkjemaFlyt.TIL_VALIDERING;
+		} else {
+			return SkjemaFlyt.TIL_SENDING;
+		}
+	}
+
+	@Override
+	public int compareTo(Skjema skjema2) {
+		return new CompareToBuilder()//
+				.append(getSkjemaFlyt().getPrioritet(),
+						skjema2.getSkjemaFlyt().getPrioritet())//
+				.append(skjemaNr, skjema2.getSkjemanNr())//
+				.toComparison();
+	}
 }
