@@ -3,6 +3,8 @@ package no.kantega.kriska.webcommando;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.kantega.kriska.WicketApplication;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
@@ -103,7 +105,13 @@ public class CommandLinePage extends WebPage {
 		@Override
 		public final void onSubmit() {
 			final Commando commando = getModelObject();
-			final Commando newCommando = new Commando(commando.getInput(), "answer");
+
+			String answer = ((WicketApplication) getApplication())
+					.getCommandoService().question(commando.getInput());
+
+			final Commando newCommando = new Commando(commando.getInput(),
+					answer);
+
 			commandoList.add(newCommando);
 			commando.setInput("");
 		}

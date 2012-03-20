@@ -1,8 +1,10 @@
 package no.kantega.kriska;
 
 import no.kantega.kriska.webcommando.CommandLinePage;
+import no.kantega.kriska.webcommando.CommandoService;
 
 import org.apache.wicket.protocol.http.WebApplication;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Application object for your web application. If you want to run this
@@ -11,6 +13,9 @@ import org.apache.wicket.protocol.http.WebApplication;
  * @see no.kantega.kriska.Start#main(String[])
  */
 public class WicketApplication extends WebApplication {
+
+	private CommandoService commandoService;
+
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
@@ -28,4 +33,14 @@ public class WicketApplication extends WebApplication {
 
 		// add your configuration here
 	}
+
+	public CommandoService getCommandoService() {
+		return commandoService;
+	}
+
+	@Required
+	public void setCommandoService(CommandoService commandoService) {
+		this.commandoService = commandoService;
+	}
+
 }
