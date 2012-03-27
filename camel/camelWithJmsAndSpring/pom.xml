@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>no.kantega.kriska</groupId>
+	<artifactId>camelWithJmsAndSpring</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>camelWithJmsAndSpring</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jms</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring</artifactId>
+			<version>2.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-camel</artifactId>
+			<version>5.5.1</version>
+		</dependency>
+
+		<!-- xbean is required for ActiveMQ broker configuration in the spring 
+			xml file -->
+		<dependency>
+			<groupId>org.apache.xbean</groupId>
+			<artifactId>xbean-spring</artifactId>
+			<version>3.9</version>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>CamelServer</id>
+			<properties>
+				<!-- we use Camel spring Main class as the server got all what it needs 
+					to start in the camel-server.xml file -->
+				<target.main.class>org.apache.camel.spring.Main</target.main.class>
+				<target.cmd.args>-ac META-INF/spring/camel-server.xml</target.cmd.args>
+			</properties>
+		</profile>
+		<profile>
+			<id>CamelServerAOP</id>
+			<properties>
+				<!-- we use Camel spring Main class as the server got all what it needs 
+					to start in the camel-server-aop.xml file -->
+				<target.main.class>org.apache.camel.spring.Main</target.main.class>
+				<target.cmd.args>-ac META-INF/spring/camel-server-aop.xml</target.cmd.args>
+			</properties>
+		</profile>
+		<profile>
+			<id>CamelClient</id>
+			<properties>
+				<!-- we start using our own class to control what we do in the main -->
+				<target.main.class>org.apache.camel.example.client.CamelClient</target.main.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>CamelClientRemoting</id>
+			<properties>
+				<!-- we start using our own class to control what we do in the main -->
+				<target.main.class>
+					org.apache.camel.example.client.CamelClientRemoting
+				</target.main.class>
+			</properties>
+		</profile>
+		<profile>
+			<id>CamelClientEndpoint</id>
+			<properties>
+				<!-- we start using our own class to control what we do in the main -->
+				<target.main.class>
+					org.apache.camel.example.client.CamelClientEndpoint
+				</target.main.class>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+</project>
