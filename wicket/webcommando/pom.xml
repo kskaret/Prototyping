@@ -19,25 +19,30 @@
 	</licenses>
 	<properties>
 		<wicket.version>1.5.5</wicket.version>
+		<spring.version>2.5.6</spring.version>
 		<jetty.version>7.5.0.v20110901</jetty.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>2.5.6</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>2.5.6</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>2.5.6</version>
+			<version>${spring.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 		<!-- WICKET DEPENDENCIES -->
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
@@ -70,7 +75,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
+			<version>4.4</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -80,6 +85,11 @@
 			<artifactId>jetty-all-server</artifactId>
 			<version>${jetty.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>1.6.1</version>
 		</dependency>
 	</dependencies>
 	<build>
